@@ -69,6 +69,9 @@ export const GUARD_REASONS: Readonly<Record<GuardReason, GuardReason>> = Object.
 );
 
 /**
+ * Alternate name for `GuardReason`, kept as an alias so existing imports keep
+ * compiling.
+ *
  * @deprecated Use `GuardReason`. Kept as an alias so existing imports keep
  * compiling; new code should import the canonical name.
  */
