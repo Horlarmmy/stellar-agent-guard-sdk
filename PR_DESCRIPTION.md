@@ -26,6 +26,14 @@ The script enforces: (1) JSDoc with non-empty prose on **all 184** exports (an `
 jsdoc check OK: 184/184 exports documented, 5/5 entry-point examples present
 ```
 
+After merging `main` (which added `src/policy-schema.ts`), the same check reports **194/194** — the two new exports (`SchemaKeyword`, `SchemaValidationOptions`) were documented in a follow-up commit rather than left to fail the new gate:
+
+```
+jsdoc check OK: 194/194 exports documented, 5/5 entry-point examples present
+```
+
+This PR also appends an addendum to `tests/fixtures/integration-evidence.md`, because it touches enforcement-path files and CI's `enforcement-path evidence gate` requires that file in the diff. The addendum states plainly that no fresh live run was made (`.env.phase2` is absent from this checkout) and proves the enforcement-path diff is comment-only: zero non-comment changed lines in `src/`, and emitted `.js`/`.d.ts` byte-identical to `main` under `tsc --removeComments`.
+
 ### Dry-run failures (script exits 1)
 
 Missing doc (temporarily stripped `explainReason`'s block, then restored):
