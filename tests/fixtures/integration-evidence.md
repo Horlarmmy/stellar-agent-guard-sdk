@@ -756,12 +756,17 @@ node --import tsx scripts/check-enforcement-evidence.ts main HEAD
 ```
 
 The 7 `@example` blocks were extracted verbatim from the committed JSDoc and
-executed (import rewritten to `../src/index.ts`, the repo's own pattern): the
-interceptor, cost, LangChain, ElizaOS and both clock examples all ran to their
-documented output; the `invoke` example was typechecked with repo-strict `tsc`
-flags instead of executed, because running it needs funded testnet credentials
-(`.env.phase2`) — `invoke` behaviour is covered by the 436-passing unit suite,
-including `tests/unit/invoke.test.ts` and `tests/unit/invoke-dry-run.test.ts`.
+executed (import rewritten to `../src/index.ts`, the repo's own pattern). The
+examples surface their expected values as `// =>` comments rather than
+`console.*` calls — main's library-side output audit (#195) scans raw `src/`
+text, comments included, and a JSDoc example is not a reason to weaken it — so
+each run was verified with a harness assertion against its `// =>` value: the
+interceptor, cost (`within budget: 1334 stroops …`, `0.0001334`), LangChain
+(`{ content: "42" }`), ElizaOS (`true`, no blocks) and both clock examples
+(`5000`; `6000`/settled) all matched; the `invoke` example was typechecked with
+repo-strict `tsc` flags instead of executed, because running it needs funded
+testnet credentials (`.env.phase2`) — `invoke` behaviour is covered by the unit
+suite, including `tests/unit/invoke.test.ts` and `tests/unit/invoke-dry-run.test.ts`.
 
 **A maintainer with `.env.phase2` should run `npm run test:integration` against
 this branch before merge** and replace this addendum with the fresh run output.
