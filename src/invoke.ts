@@ -765,8 +765,9 @@ function reserveNextSequence(
  * });
  *
  * if (outcome.kind === "dry_run") {
- *   console.log(outcome.verdict, outcome.fees.totalFeeStroops);
- *   console.table(outcome.steps);
+ *   outcome.verdict; // => "admissible", or the refusal verdict
+ *   outcome.fees.totalFeeStroops; // => the fees the dry run charged
+ *   outcome.steps; // => the stage trace: probe → sign → simulate
  * }
  * ```
  *
