@@ -118,7 +118,7 @@ export interface LangChainGuardOptions {
  *   { toolCall: { name: "get_balance", args: {}, id: "call-1" } },
  *   async () => ({ content: "42" }),
  * );
- * console.log(result); // { content: "42" }
+ * result; // => { content: "42" }
  * ```
  */
 export function createLangChainGuardMiddleware(options: LangChainGuardOptions) {
