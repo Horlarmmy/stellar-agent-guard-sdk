@@ -419,12 +419,11 @@ export function describeCostDecision(decision: CostDecision): string {
  * const call = { contract: guard, fn: "transfer", args: [] };
  * const cost = await checker.check(call);
  *
- * console.log(describeCostDecision(cost));
- * // within budget: ... stroops (... resource + ... inclusion), ceiling 10000
+ * describeCostDecision(cost); // => "within budget: ... stroops (... resource + ... inclusion), ceiling 10000"
  *
  * // The two fee components, never conflated:
  * const { totalFeeStroops } = feeBreakdown(1_234n);
- * console.log(`${formatFee(totalFeeStroops)} XLM`);
+ * formatFee(totalFeeStroops); // => "0.0001334" (XLM, 7 decimal places)
  * ```
  */
 export class CostPreChecker {
