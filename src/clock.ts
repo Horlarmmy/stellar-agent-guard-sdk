@@ -25,7 +25,7 @@
  * // Tests: a FakeClock makes time-dependent code deterministic.
  * const clock = new FakeClock(0);
  * clock.advance(5_000); // one approximate ledger window later — instantly
- * console.log(clock.now()); // 5000
+ * clock.now(); // => 5000
  * ```
  */
 
@@ -70,11 +70,11 @@ export const systemClock: Clock = {
  *
  * clock.advance(4999); // t=5999ms — one millisecond short of the due time
  * await Promise.resolve(); // flush microtasks
- * console.log(settled); // false — nothing settles before its due time
+ * settled; // => false — nothing settles before its due time
  *
  * clock.advance(1); // t=6000ms — the sleep is due
  * await pending; // settles now, with zero waiting in real time
- * console.log(clock.now()); // 6000
+ * clock.now(); // => 6000
  * ```
  */
 export class FakeClock implements Clock {
