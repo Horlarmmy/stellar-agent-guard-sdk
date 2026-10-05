@@ -439,7 +439,8 @@ function configFingerprint(config: PreFlightConfig): string {
  *   await interceptor.check({ contract: guard, fn: "transfer amount", args: [] });
  * } catch (error) {
  *   if (error instanceof InvalidInputError) {
- *     console.log(`rejected ${error.field} by rule ${error.rule}`);
+ *     error.field; // => "fn"
+ *     error.rule; // => "symbol_shape"
  *   }
  * }
  * ```
