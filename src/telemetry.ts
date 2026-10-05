@@ -978,11 +978,23 @@ export async function* mergeGuardEventStreams(
   }
 }
 
+/**
+ * Persistence adapter for the committed-stream cursor: `watch()` saves after
+ * each page it consumes and loads on start when no ledger/cursor was supplied,
+ * so a restarted listener resumes where the process died instead of skipping
+ * everything emitted while it was down. Opt in through
+ * `GuardTelemetryConfig.cursorStore`; the default keeps the cursor in memory.
+ */
 export interface CursorStore {
   save(cursor: string): Promise<void>;
   load(): Promise<string | null>;
 }
 
+/**
+ * The default {@link CursorStore}: a cursor in process memory. It gives
+ * `watch()` a store to talk to without configuration and survives nothing
+ * beyond this process — persist the cursor elsewhere to cross restarts.
+ */
 export class InMemoryCursorStore implements CursorStore {
   private cursor: string | null = null;
   async save(cursor: string): Promise<void> {
