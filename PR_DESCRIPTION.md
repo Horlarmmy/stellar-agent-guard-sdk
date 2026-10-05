@@ -26,10 +26,10 @@ The script enforces: (1) JSDoc with non-empty prose on **all 184** exports (an `
 jsdoc check OK: 184/184 exports documented, 5/5 entry-point examples present
 ```
 
-After merging `main` (which added `src/policy-schema.ts`), the same check reports **194/194** — the two new exports (`SchemaKeyword`, `SchemaValidationOptions`) were documented in a follow-up commit rather than left to fail the new gate:
+As `main` kept moving during review, each merge's new exports were documented in follow-up commits rather than left to fail the new gate: `src/policy-schema.ts` (#250) took it to **194/194**, the Vercel AI adapter (#198) to 207, and the cursor/heartbeat/MCP merges to **244/244** — including this branch's own gate catching `VercelAIGuardOptions` on `main` the first time it ran against it:
 
 ```
-jsdoc check OK: 194/194 exports documented, 5/5 entry-point examples present
+jsdoc check OK: 244/244 exports documented, 5/5 entry-point examples present
 ```
 
 This PR also appends an addendum to `tests/fixtures/integration-evidence.md`, because it touches enforcement-path files and CI's `enforcement-path evidence gate` requires that file in the diff. The addendum states plainly that no fresh live run was made (`.env.phase2` is absent from this checkout) and proves the enforcement-path diff is comment-only: zero non-comment changed lines in `src/`, and emitted `.js`/`.d.ts` byte-identical to `main` under `tsc --removeComments`.
@@ -53,7 +53,7 @@ exit code: 1
 
 ### Example executions
 
-Each example was extracted **verbatim** from the committed JSDoc (import rewritten `stellar-agent-guard-sdk` → `../src/index.ts`, repo's own pattern) and run with `node --import tsx`:
+Each example was extracted **verbatim** from the committed JSDoc (import rewritten `stellar-agent-guard-sdk` → `../src/index.ts`, repo's own pattern) and run with `node --import tsx`. Examples state their expected values as `// =>` comments, not `console.*` calls, so `main`'s library-side output audit (`tests/unit/logger.test.ts`, which scans raw `src/` text including comments) stays green — each run was verified by a harness assertion against its `// =>` value:
 
 | Example | Source | Result |
 |---|---|---|
@@ -85,5 +85,6 @@ Each example was extracted **verbatim** from the committed JSDoc (import rewritt
 
 ## Scope notes
 
-- `clock.ts`'s two stale examples were fixed as part of this issue (they cited an API that doesn't exist); no other example was modified.
+- `clock.ts`'s two stale examples were fixed as part of this issue (they cited an API that doesn't exist).
+- After the merge of `main`'s output audit (#195: no `console.*` anywhere in `src/`, comments included), the examples were rewritten from `console.log(...)` to `// =>` comment annotations — the audit's contract shipped as "anywhere in `src/`", and a JSDoc example is not a reason to weaken it. All seven examples were re-extracted and re-verified afterwards.
 - Fixes discovered en route and included: `GuardReasonName` had an `@deprecated`-only comment (no prose), and `buildGuardAuthEntry`'s doc block had drifted away from its function in `src/tx.ts`.
